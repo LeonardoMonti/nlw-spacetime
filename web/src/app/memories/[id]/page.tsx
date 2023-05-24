@@ -1,7 +1,8 @@
+import Button from '@/components/Button'
 import { EmptyMemories } from '@/components/EmptyMemories'
 import { api } from '@/lib/api'
 import dayjs from 'dayjs'
-import { ArrowLeft, Edit3, Trash2 } from 'lucide-react'
+import { ArrowLeft, Edit3 } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -66,10 +67,7 @@ export default async function MemoryDetailsPage({ params: { id } }: Params) {
           <Edit3 className="h-4 w-4" />
         </button>
 
-        <button className="flex items-center gap-2 text-sm text-gray-200 hover:text-gray-100">
-          Excluir
-          <Trash2 className="h-4 w-4" />
-        </button>
+        <Button id={memory.id} />
       </div>
     </div>
   )
