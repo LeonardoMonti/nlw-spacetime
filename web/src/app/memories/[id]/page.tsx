@@ -1,11 +1,13 @@
-import Button from '@/components/Button'
-import { EmptyMemories } from '@/components/EmptyMemories'
 import { api } from '@/lib/api'
 import dayjs from 'dayjs'
-import { ArrowLeft, Edit3 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
+
+import HandleDeleteMemory from '@/components/Button/HandleDeleteMemory'
+import HandleEditMemory from '@/components/Button/HandleEditMemory'
+import { EmptyMemories } from '@/components/EmptyMemories'
 
 interface Params {
   params: {
@@ -62,12 +64,8 @@ export default async function MemoryDetailsPage({ params: { id } }: Params) {
           <ArrowLeft className="h-4 w-4" />
         </Link>
 
-        <button className="flex items-center gap-2 text-sm text-gray-200 hover:text-gray-100">
-          Editar
-          <Edit3 className="h-4 w-4" />
-        </button>
-
-        <Button id={memory.id} />
+        <HandleEditMemory currencyMemory={memory} />
+        <HandleDeleteMemory id={memory.id} />
       </div>
     </div>
   )

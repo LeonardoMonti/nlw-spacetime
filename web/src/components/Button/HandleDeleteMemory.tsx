@@ -12,7 +12,7 @@ interface props {
   id: string
 }
 
-export default function Button({ id }: props) {
+export default function HandleDeleteMemory({ id }: props) {
   const [deleting, setDeleting] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const router = useRouter()
@@ -44,6 +44,7 @@ export default function Button({ id }: props) {
       }
     }
   }
+
   return (
     <>
       <button
