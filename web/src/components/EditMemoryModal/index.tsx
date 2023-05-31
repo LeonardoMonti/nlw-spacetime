@@ -1,7 +1,13 @@
 'use client'
 
 import { api } from '@/lib/api'
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useState,
+  useEffect,
+  useRef,
+} from 'react'
 import { useRouter } from 'next/navigation'
 import Cookie from 'js-cookie'
 import { Camera } from 'lucide-react'
@@ -17,6 +23,20 @@ export default function EditMemoryModal({
   const [coverUrl, setCoverUrl] = useState(memory.coverUrl)
   const [isPublic, setIsPublic] = useState(memory.isPublic)
   const [preview, setPreview] = useState<string | null>(null)
+  const [hasChanged, setHasChanged] = useState(false)
+  const initialFormState = useRef({
+    content: memory.content,
+    coverUrl: memory.coverUrl,
+    isPublic: memory.isPublic,
+  })
+
+  useEffect(() => {
+    setHasChanged(
+      content !== initialFormState.current.content ||
+        coverUrl !== initialFormState.current.coverUrl ||
+        isPublic !== initialFormState.current.isPublic,
+    )
+  }, [content, coverUrl, isPublic])
 
   function onFileSelected(event: ChangeEvent<HTMLInputElement>) {
     const { files } = event.target
@@ -40,14 +60,6 @@ export default function EditMemoryModal({
 
     const token = Cookie.get('token')
 
-    if (fileToUpload) {
-      const uploadFormData = new FormData()
-      uploadFormData.set('file', fileToUpload)
-
-      const uploadResponse = await api.post('/upload', uploadFormData)
-
-      setCoverUrl(uploadResponse.data.fileUrl)
-    }
     try {
       const response = await api.put(
         `/memories/${memory.id}`,
@@ -63,8 +75,18 @@ export default function EditMemoryModal({
         },
       )
 
+      if (fileToUpload) {
+        const uploadFormData = new FormData()
+        uploadFormData.set('file', fileToUpload)
+
+        const uploadResponse = await api.post('/upload', uploadFormData)
+
+        setCoverUrl(uploadResponse.data.fileUrl)
+      }
+
       if (response.status === 200) {
         router.push(`/memories/${memory.id}`)
+        router.refresh()
       } else {
         console.error('Erro ao editar a memória.')
       }
@@ -72,6 +94,7 @@ export default function EditMemoryModal({
       console.error('Ocorreu um erro na requisição: ', error)
     } finally {
       onCancel()
+      router.refresh()
     }
   }
 
@@ -121,16 +144,15 @@ export default function EditMemoryModal({
               accept="image/*"
               className="invisible h-0 w-0"
             />
-
-            {preview && (
+            {
               // eslint-disable-next-line
               <img
                 src={preview || coverUrl}
                 data-value={coverUrl}
-                alt=""
                 className="aspect-video rounded-lg object-cover"
+                alt=""
               />
-            )}
+            }
           </>
 
           <textarea
@@ -151,7 +173,10 @@ export default function EditMemoryModal({
           <button
             type="submit"
             onClick={onConfirm}
-            className="rounded bg-green-500 px-4 py-2 text-white transition-all hover:bg-green-400"
+            className={`rounded bg-green-500 px-4 py-2 text-white transition-all hover:bg-green-400 ${
+              !hasChanged && 'cursor-not-allowed opacity-50'
+            }`}
+            disabled={!hasChanged}
           >
             Salvar
           </button>

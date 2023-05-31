@@ -34,6 +34,7 @@ export default function HandleDeleteMemory({ id }: props) {
 
         if (response.status === 200) {
           router.push('/')
+          router.refresh()
         } else {
           console.error('Erro ao deletar a memória.')
         }
