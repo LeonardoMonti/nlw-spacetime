@@ -56,7 +56,7 @@ export default function EditMemoryModal({
 
     const formData = new FormData(event.currentTarget)
 
-    const fileToUpload = formData.get('coverUrl')
+    // const fileToUpload = formData.get('coverUrl')
 
     const token = Cookie.get('token')
 
@@ -75,14 +75,14 @@ export default function EditMemoryModal({
         },
       )
 
-      if (fileToUpload) {
-        const uploadFormData = new FormData()
-        uploadFormData.set('file', fileToUpload)
+      // if (fileToUpload) {
+      //   const uploadFormData = new FormData()
+      //   uploadFormData.set('file', fileToUpload)
 
-        const uploadResponse = await api.post('/upload', uploadFormData)
+      //   const uploadResponse = await api.post('/upload', uploadFormData)
 
-        setCoverUrl(uploadResponse.data.fileUrl)
-      }
+      //   setCoverUrl(uploadResponse.data.fileUrl)
+      // }
 
       if (response.status === 200) {
         router.push(`/memories/${memory.id}`)

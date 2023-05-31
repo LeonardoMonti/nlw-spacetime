@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import nlwLogo from '@/assets/nlw-spacetime-logo.svg'
 import Link from 'next/link'
+import HandleToggleMemories from '../Button/HandleToggleMemories'
 
 export function Hero() {
   return (
@@ -23,6 +24,7 @@ export function Hero() {
       >
         CADASTRAR LEMBRANÇA
       </Link>
+      <HandleToggleMemories />
     </div>
   )
 }
